@@ -1,0 +1,25 @@
+{
+  "name": "paywall-cosmo",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "typecheck": "nuxt typecheck",
+    "postinstall": "nuxt prepare"
+  },
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vue-tsc": "^3.3.13"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "@nuxt/fonts": "^1.0.1",
+    "nuxt": "^4.6.2",
+    "vue": "^3.5.44",
+    "vue-router": "^5.4.0"
+  }
+}
