@@ -4,9 +4,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: [
     '@fontsource/noto-sans-sc/cyrillic-400.css',
-    '@fontsource/noto-sans-sc/cyrillic-600.css',
+    '@fontsource/noto-sans-sc/cyrillic-700.css',
     // latin-ext нужен ради знака рубля ₽
-    '@fontsource/noto-sans-sc/latin-ext-600.css',
+    '@fontsource/noto-sans-sc/latin-ext-700.css',
     '~/assets/css/main.css',
   ],
 

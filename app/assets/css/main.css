@@ -1,0 +1,104 @@
+/* ---------- Дизайн-токены ---------- */
+:root {
+  --color-bg: #fff9ec;
+  --color-surface: #fff;
+  --color-text: #26324a;
+  --color-text-soft: #4e5a70;
+  --color-text-muted: #68748a;
+  --color-radio-border: #c7ccd4;
+  --color-border: #e8e4db;
+
+  --color-accent: #f5a623;
+  --color-accent-active: #e0951a;
+
+  --color-success: #5ba84a;
+  --color-success-border: #72b85a;
+  --color-success-bg: #f1f8e9;
+  --color-badge-text: #4d8c3c;
+  --color-badge-bg: #ddf0ce;
+
+  --color-brand-bg: #ffe7a8;
+
+  --font-sans: 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --page-max-width: 430px;
+  --page-gutter: 20px;
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100svh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+fieldset {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ----- .sr-only - элементы только для скрин-ридеров ----- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
