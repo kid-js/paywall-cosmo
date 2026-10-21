@@ -5,8 +5,8 @@ export default defineNuxtConfig({
   css: [
     '@fontsource/noto-sans-sc/cyrillic-400.css',
     '@fontsource/noto-sans-sc/cyrillic-700.css',
-    // latin-ext нужен ради знака рубля ₽
-    '@fontsource/noto-sans-sc/latin-ext-700.css',
+    '@fontsource/noto-sans-sc/latin-400.css',
+    '@fontsource/noto-sans-sc/latin-700.css',
     '~/assets/css/main.css',
   ],
 
@@ -16,7 +16,7 @@ export default defineNuxtConfig({
       title: 'Космоклуб - открой всю галактику',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
-        { name: 'theme-color', content: '#fff8e8' },
+        { name: 'theme-color', content: '#fff9ec' },
       ],
     },
   },

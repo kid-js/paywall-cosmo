@@ -332,7 +332,8 @@ const {
 }
 
 .restore-link {
-  margin-top: 12px;
+  min-height: 44px;
+  padding-inline: 16px;
   color: var(--color-text-muted);
   font-size: 13px;
   line-height: 20px;
