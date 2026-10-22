@@ -1,42 +1,15 @@
-// Mock-данные, пока нет бэка
-const OFFERS: Offer[] = [
-  {
-    id: 'yearly',
-    title: 'На год',
-    description: 'Бесплатно 7 дней',
-    price: 2490,
-    currency: 'RUB',
-    periodLabel: 'в год',
-    badge: 'Выгоднее на 58%',
-    ctaLabel: 'Попробовать бесплатно',
-    footnote: '7 дней бесплатно, отмена в любой момент',
-    isDefault: true,
-  },
-  {
-    id: 'monthly',
-    title: 'На месяц',
-    description: 'Оплата каждый месяц',
-    price: 499,
-    currency: 'RUB',
-    periodLabel: 'в месяц',
-    ctaLabel: 'Подписаться',
-    footnote: 'Отмена в любой момент',
-  },
-]
-
-// Имитация запроса. Позже заменится на запрос к GET /api/offers
-async function fetchOffers(): Promise<Offer[]> {
-  await new Promise((resolve) => setTimeout(resolve, 665))
-  return OFFERS
-}
+// Пока пользователь всегда один и тот же
+const USER_ID = 155
 
 export function usePaywall() {
-  const { data: offers, status } = useAsyncData('offers', fetchOffers, {
-    server: false,
+  const { data: offers, status } = useFetch<Offer[]>('/api/offers', {
     default: () => [],
   })
 
+  const purchase = ref<PurchaseResponse | null>(null)
   const chosenOfferId = ref<string | null>(null)
+  const purchaseError = ref<string | null>(null)
+  const isPurchasing = ref(false)
 
   const isLoading = computed(() => status.value === 'idle' || status.value === 'pending')
 
@@ -52,10 +25,40 @@ export function usePaywall() {
     set: (id) => chosenOfferId.value = id,
   })
 
+  async function buy() {
+    if (!selectedOffer.value || isPurchasing.value) {
+      return
+    }
+
+    isPurchasing.value = true
+    purchaseError.value = null
+
+    try {
+      purchase.value = await $fetch<PurchaseResponse>('/api/purchase', {
+        method: 'POST',
+        body: {
+          userId: USER_ID,
+          offerId: selectedOffer.value.id,
+        } satisfies PurchaseRequest,
+      })
+    }
+    catch (error) {
+      console.error(error)
+      purchaseError.value = 'Не удалось оформить покупку. Попробуйте ещё раз'
+    }
+    finally {
+      isPurchasing.value = false
+    }
+  }
+
   return {
-    selectedOfferId,
-    selectedOffer,
-    isLoading,
     offers,
+    isLoading,
+    selectedOffer,
+    selectedOfferId,
+    purchaseError,
+    isPurchasing,
+    purchase,
+    buy,
   }
 }

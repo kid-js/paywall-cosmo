@@ -2,6 +2,7 @@ export interface Offer {
   id: string
   title: string
   description: string
+  successTitle: string
   periodLabel: string
   isDefault?: boolean
   currency: string

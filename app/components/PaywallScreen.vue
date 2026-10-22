@@ -1,9 +1,12 @@
 <script setup lang="ts">
 const {
+  buy,
   offers,
   isLoading,
   selectedOffer,
   selectedOfferId,
+  purchaseError,
+  isPurchasing,
 } = usePaywall()
 </script>
 
@@ -30,7 +33,7 @@ const {
       <p class="paywall__subtitle">Космические истории, игры и планеты для маленьких исследователей.</p>
     </section>
 
-    <fieldset class="offers">
+    <fieldset class="offers" :disabled="isPurchasing">
       <legend class="sr-only">Выберите тариф</legend>
 
       <label
@@ -71,12 +74,24 @@ const {
     </ul>
 
     <div class="paywall__actions">
-      <button class="cta" type="button" :disabled="!selectedOffer">
+      <button
+        class="cta"
+        type="button"
+        :disabled="isPurchasing || !selectedOffer"
+        :aria-busy="isPurchasing"
+        @click="buy"
+      >
         <span>{{ selectedOffer?.ctaLabel || 'Подписаться' }}</span>
-        <img src="/icons/arrow-right.svg" width="16" height="16" alt="" aria-hidden="true">
+        <span v-if="isPurchasing" class="cta__loader" aria-hidden="true" />
+        <img v-else src="/icons/arrow-right.svg" width="16" height="16" alt="" aria-hidden="true">
       </button>
 
-      <p class="paywall__note">{{ selectedOffer?.footnote }}</p>
+      <p v-if="purchaseError" class="paywall__note paywall__note--error" role="alert">
+        {{ purchaseError }}
+      </p>
+      <p v-else class="paywall__note">
+        {{ selectedOffer?.footnote }}
+      </p>
 
       <button class="restore-link" type="button">Восстановить покупки</button>
     </div>
@@ -331,6 +346,10 @@ const {
   line-height: 20px;
 }
 
+.paywall__note--error {
+  color: var(--color-error);
+}
+
 .restore-link {
   min-height: 44px;
   padding-inline: 16px;
@@ -341,7 +360,22 @@ const {
   text-underline-offset: 2px;
 }
 
-/* ---------- Loader ---------- */
+/* ---------- Loaders ---------- */
+.cta__loader {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgb(255 255 255 / 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: cta-loader 0.8s linear infinite;
+}
+
+@keyframes cta-loader {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
 .loader {
   width: 50px;
   aspect-ratio: 1;

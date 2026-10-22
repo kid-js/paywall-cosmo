@@ -1,0 +1,26 @@
+export const OFFERS: Offer[] = [
+  {
+    id: 'yearly',
+    title: 'На год',
+    description: 'Бесплатно 7 дней',
+    price: 2490,
+    currency: 'RUB',
+    periodLabel: 'в год',
+    badge: 'Выгоднее на 58%',
+    ctaLabel: 'Попробовать бесплатно',
+    footnote: '7 дней бесплатно, отмена в любой момент',
+    successTitle: 'Годовой доступ активирован',
+    isDefault: true,
+  },
+  {
+    id: 'monthly',
+    title: 'На месяц',
+    description: 'Оплата каждый месяц',
+    price: 499,
+    currency: 'RUB',
+    periodLabel: 'в месяц',
+    ctaLabel: 'Подписаться',
+    footnote: 'Отмена в любой момент',
+    successTitle: 'Месячный доступ активирован',
+  },
+]

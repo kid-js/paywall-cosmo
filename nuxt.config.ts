@@ -2,6 +2,12 @@
 export default defineNuxtConfig({
   compatibilityDate: '2026-10-18',
   devtools: { enabled: true },
+
+  runtimeConfig: {
+    databaseUrl: '',
+    databaseAuthToken: '',
+  },
+
   css: [
     '@fontsource/noto-sans-sc/cyrillic-400.css',
     '@fontsource/noto-sans-sc/cyrillic-700.css',
