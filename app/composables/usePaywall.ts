@@ -25,6 +25,10 @@ export function usePaywall() {
     set: (id) => chosenOfferId.value = id,
   })
 
+  const purchasedOffer = computed(() => {
+    return offers.value.find((offer) => offer.id === purchase.value?.offerId)
+  })
+
   async function buy() {
     if (!selectedOffer.value || isPurchasing.value) {
       return
@@ -56,6 +60,7 @@ export function usePaywall() {
     isLoading,
     selectedOffer,
     selectedOfferId,
+    purchasedOffer,
     purchaseError,
     isPurchasing,
     purchase,

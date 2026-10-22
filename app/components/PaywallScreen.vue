@@ -5,8 +5,10 @@ const {
   isLoading,
   selectedOffer,
   selectedOfferId,
+  purchasedOffer,
   purchaseError,
   isPurchasing,
+  purchase,
 } = usePaywall()
 </script>
 
@@ -25,76 +27,109 @@ const {
       </div>
     </header>
 
-    <section class="paywall__intro">
-      <div class="hero">
-        <img class="hero__image" src="/images/hero-astronaut.png" width="76" height="76" alt="">
+    <!-- Успешная покупка -->
+    <template v-if="purchase">
+      <section class="paywall__intro" role="status">
+        <div class="success-badge" aria-hidden="true">
+          <img src="/icons/success-check.svg" width="48" height="48" alt="">
+        </div>
+        <h1 class="paywall__title paywall__title--success">Покупка успешна!</h1>
+        <p class="paywall__subtitle paywall__subtitle--success">
+          Вся галактика уже открыта! Готов отправиться в первое приключение?
+        </p>
+      </section>
+
+      <div class="access-card">
+        <img src="/icons/star.svg" width="22" height="22" alt="" aria-hidden="true">
+        <div>
+          <p class="access-card__title">{{ purchasedOffer?.successTitle }}</p>
+          <p class="access-card__description">
+            Исследуй истории и миры без ограничений
+          </p>
+        </div>
       </div>
-      <h1 class="paywall__title">Открой всю галактику!</h1>
-      <p class="paywall__subtitle">Космические истории, игры и планеты для маленьких исследователей.</p>
-    </section>
 
-    <fieldset class="offers" :disabled="isPurchasing">
-      <legend class="sr-only">Выберите тариф</legend>
+      <div class="paywall__actions paywall__actions--success">
+        <button class="cta" type="button">
+          <span>Начать приключение</span>
+          <img src="/icons/arrow-right.svg" width="16" height="16" alt="" aria-hidden="true">
+        </button>
+      </div>
+    </template>
 
-      <label
-        v-for="offer in offers"
-        :key="offer.id"
-        class="offer"
-        :class="{
-          'offer--selected': offer.id === selectedOfferId,
-          'offer--with-badge': offer.badge,
-        }"
-      >
-        <input
-          v-model="selectedOfferId"
-          class="offer__input sr-only"
-          type="radio"
-          name="offer"
-          :value="offer.id"
+    <!-- Paywall -->
+    <template v-else>
+      <section class="paywall__intro">
+        <div class="hero">
+          <img class="hero__image" src="/images/hero-astronaut.png" width="76" height="76" alt="">
+        </div>
+        <h1 class="paywall__title">Открой всю галактику!</h1>
+        <p class="paywall__subtitle">Космические истории, игры и планеты для маленьких исследователей.</p>
+      </section>
+
+      <fieldset class="offers" :disabled="isPurchasing">
+        <legend class="sr-only">Выберите тариф</legend>
+
+        <label
+          v-for="offer in offers"
+          :key="offer.id"
+          class="offer"
+          :class="{
+            'offer--selected': offer.id === selectedOfferId,
+            'offer--with-badge': offer.badge,
+          }"
         >
-        <span class="offer__radio" aria-hidden="true" />
+          <input
+            v-model="selectedOfferId"
+            class="offer__input sr-only"
+            type="radio"
+            name="offer"
+            :value="offer.id"
+          >
+          <span class="offer__radio" aria-hidden="true" />
 
-        <span class="offer__info">
-          <span class="offer__title">{{ offer.title }}</span>
-          <span class="offer__description">{{ offer.description }}</span>
-        </span>
+          <span class="offer__info">
+            <span class="offer__title">{{ offer.title }}</span>
+            <span class="offer__description">{{ offer.description }}</span>
+          </span>
 
-        <span class="offer__price">
-          <span class="offer__amount">{{ formatPrice(offer.price, offer.currency) }}</span>
-          <span class="offer__period">{{ offer.periodLabel }}</span>
-        </span>
+          <span class="offer__price">
+            <span class="offer__amount">{{ formatPrice(offer.price, offer.currency) }}</span>
+            <span class="offer__period">{{ offer.periodLabel }}</span>
+          </span>
 
-        <span v-if="offer.badge" class="offer__badge">{{ offer.badge }}</span>
-      </label>
-    </fieldset>
+          <span v-if="offer.badge" class="offer__badge">{{ offer.badge }}</span>
+        </label>
+      </fieldset>
 
-    <ul class="features">
-      <li class="features__item">Все истории и космические миры</li>
-      <li class="features__item">Новые приключения каждую неделю</li>
-    </ul>
+      <ul class="features">
+        <li class="features__item">Все истории и космические миры</li>
+        <li class="features__item">Новые приключения каждую неделю</li>
+      </ul>
 
-    <div class="paywall__actions">
-      <button
-        class="cta"
-        type="button"
-        :disabled="isPurchasing || !selectedOffer"
-        :aria-busy="isPurchasing"
-        @click="buy"
-      >
-        <span>{{ selectedOffer?.ctaLabel || 'Подписаться' }}</span>
-        <span v-if="isPurchasing" class="cta__loader" aria-hidden="true" />
-        <img v-else src="/icons/arrow-right.svg" width="16" height="16" alt="" aria-hidden="true">
-      </button>
+      <div class="paywall__actions">
+        <button
+          class="cta"
+          type="button"
+          :disabled="isPurchasing || !selectedOffer"
+          :aria-busy="isPurchasing"
+          @click="buy"
+        >
+          <span>{{ selectedOffer?.ctaLabel || 'Подписаться' }}</span>
+          <span v-if="isPurchasing" class="cta__loader" aria-hidden="true" />
+          <img v-else src="/icons/arrow-right.svg" width="16" height="16" alt="" aria-hidden="true">
+        </button>
 
-      <p v-if="purchaseError" class="paywall__note paywall__note--error" role="alert">
-        {{ purchaseError }}
-      </p>
-      <p v-else class="paywall__note">
-        {{ selectedOffer?.footnote }}
-      </p>
+        <p v-if="purchaseError" class="paywall__note paywall__note--error" role="alert">
+          {{ purchaseError }}
+        </p>
+        <p v-else class="paywall__note">
+          {{ selectedOffer?.footnote }}
+        </p>
 
-      <button class="restore-link" type="button">Восстановить покупки</button>
-    </div>
+        <button class="restore-link" type="button">Восстановить покупки</button>
+      </div>
+    </template>
   </main>
 </template>
 
@@ -358,6 +393,55 @@ const {
   line-height: 20px;
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+/* ---------- Экран успеха ---------- */
+.success-badge {
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: var(--color-badge-bg);
+}
+
+.paywall__title--success {
+  margin-top: 16px;
+  font-size: 28px;
+}
+
+.paywall__subtitle--success {
+  font-size: 16px;
+  line-height: 25px;
+  text-wrap: wrap;
+}
+
+.access-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 8px 0;
+  padding: 16px 17px;
+  border: 1px solid var(--color-success-card-border);
+  border-radius: 20px;
+  background: var(--color-success-bg);
+}
+
+.access-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.access-card__description {
+  margin-top: 3px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.paywall__actions--success {
+  margin-top: 28px;
 }
 
 /* ---------- Loaders ---------- */
